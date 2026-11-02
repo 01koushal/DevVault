@@ -1,0 +1,32 @@
+{% extends 'vault/base.html' %}
+{% block title %}Credential index{% endblock %}
+{% block breadcrumb %}CREDENTIAL INDEX{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="title-block"><div class="eyebrow"><span>01</span> YOUR WORKSPACE</div><h1>Credential index</h1><p class="subtitle">The keys and connections your projects depend on.</p></div>
+  <a class="btn btn-primary" href="{% url 'secret_create' %}"><span class="plus">+</span> Add credential</a>
+</section>
+<section class="stats" aria-label="Vault summary">
+  <article class="stat-card"><div class="stat-label">CREDENTIALS</div><div class="stat-value">{{ total_count }}<span class="stat-caption">stored entries</span></div></article>
+  <article class="stat-card"><div class="stat-label">PROJECTS</div><div class="stat-value">{{ project_count }}<span class="stat-caption">separate contexts</span></div></article>
+  <article class="stat-card status-card"><div class="stat-label">STORAGE STATUS</div><div class="stat-value"><span class="status-dot"></span>Encrypted<span class="stat-caption">values protected at rest</span></div></article>
+</section>
+<section class="vault-section">
+  <div class="section-head"><div><span class="section-index">01 / INVENTORY</span><h2>All credentials</h2></div><span class="count-pill">{{ secrets|length }} shown</span></div>
+  <form method="get" class="filters"><label class="searchbox"><span class="search-mark">⌕</span><input type="search" name="q" value="{{ query }}" placeholder="Find a credential or project" aria-label="Search secrets or projects"></label><select name="project" class="input filter-select" aria-label="Filter by project"><option value="">Every project</option>{% for name in project_names %}<option value="{{ name }}" {% if selected_project == name %}selected{% endif %}>{{ name }}</option>{% endfor %}</select><button class="btn btn-secondary" type="submit">Apply filters</button>{% if query or selected_project %}<a class="clear-link" href="{% url 'dashboard' %}">Reset</a>{% endif %}</form>
+  <div class="list-head"><span>NAME</span><span>PROJECT / TYPE</span><span>VALUE</span><span>ACTIONS</span></div>
+  <div class="secret-list">
+    {% for secret in secrets %}
+    <article class="secret-row">
+      <div class="secret-main"><div class="secret-title">{{ secret.name }}</div><div class="secret-mobile-meta">{{ secret.project }} · {{ secret.secret_type }}</div></div>
+      <div class="secret-meta"><span class="project-name">{{ secret.project }}</span><span class="type-tag">{{ secret.secret_type }}</span></div>
+      <div class="secret-value"><span class="masked">••••••••••••••</span><small>Encrypted</small></div>
+      <div class="row-actions"><a class="row-action" title="Reveal" href="{% url 'secret_reveal' secret.pk %}">Reveal</a><a class="row-action" title="Edit" href="{% url 'secret_edit' secret.pk %}">Edit</a><form method="post" action="{% url 'secret_delete' secret.pk %}" data-confirm="Delete this secret? This cannot be undone.">{% csrf_token %}<button class="row-action delete-action" title="Delete" type="submit">Delete</button></form></div>
+    </article>
+    {% empty %}
+    <div class="empty-state"><div class="empty-rule">NO ENTRIES YET</div><h3>A clean slate.</h3><p>Add a project credential and it will appear here, organized and encrypted.</p><a class="btn btn-primary" href="{% url 'secret_create' %}">Add your first credential <span>→</span></a></div>
+    {% endfor %}
+  </div>
+</section>
+<div class="security-note"><span class="security-index">NOTE</span><p>Values are encrypted before they are saved. Reveal a value only when you need it.</p><span class="note-right">FERNET ENCRYPTION</span></div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'vault/base.html' %}
+{% block title %}Reveal secret{% endblock %}
+{% block breadcrumb %}CREDENTIAL / REVEAL{% endblock %}
+{% block content %}
+<section class="form-page">
+  <a href="{% url 'dashboard' %}" class="back-link">← Back to vault</a>
+  <div class="eyebrow"><span class="pulse"></span> EXPLICIT REVEAL</div><h1>{{ secret.name }}</h1><p class="subtitle">{{ secret.project }} / {{ secret.secret_type }}</p>
+  <div class="panel reveal-panel"><label>Decrypted value</label><div class="reveal-value" id="secret-value">{{ value }}</div><div class="form-buttons"><button class="btn btn-primary" type="button" data-copy="#secret-value">Copy value</button><a class="btn btn-secondary" href="{% url 'dashboard' %}">Close</a></div><p class="warning-text">Only reveal demo credentials in local development. Avoid screenshots or sharing that expose real secrets.</p></div>
+</section>
+{% endblock %}

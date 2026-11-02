@@ -1,0 +1,16 @@
+{% extends 'vault/base.html' %}
+{% block title %}Sign in{% endblock %}
+{% block breadcrumb %}SIGN IN{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="eyebrow"><span class="pulse"></span> PRIVATE WORKSPACE</div>
+  <h1>Welcome <span class="gradient-text">back.</span></h1>
+  <p class="subtitle">Your keys. Your projects. One secure workspace.</p>
+  <form method="post" class="panel form-panel">{% csrf_token %}
+    {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+    {% for field in form %}<label>{{ field.label }}{{ field }}</label>{% if field.errors %}<div class="form-errors">{{ field.errors }}</div>{% endif %}{% endfor %}
+    <button class="btn btn-primary btn-wide" type="submit">Sign in <span>→</span></button>
+    <p class="form-foot">New here? <a href="{% url 'register' %}">Create an account</a></p>
+  </form>
+</section>
+{% endblock %}
