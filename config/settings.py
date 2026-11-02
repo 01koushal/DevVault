@@ -1,4 +1,4 @@
-```python
+python
 import os
 from pathlib import Path
 
@@ -206,4 +206,3 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
 }
-```
